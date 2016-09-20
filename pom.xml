@@ -1,0 +1,154 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>br.com.involves</groupId>
+	<artifactId>poe-controller-SNAPSHOT</artifactId>
+	<version>1.16.9.2</version>
+	<name>poe-controller-SNAPSHOT</name>
+	<description>POST Once Exactly (POE) - Controla o POST para identificar requisição duplicadas.</description>
+	<packaging>jar</packaging>
+
+	<properties>
+		<java.version>1.7</java.version>
+		<java.encoding>ISO-8859-1</java.encoding>
+		<junit.version>4.12</junit.version>
+		<commons-lang.version>2.6</commons-lang.version>
+	</properties>
+	
+	<dependencies>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+			<version>4.3.2.RELEASE</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons-lang.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.socialsignin</groupId>
+			<artifactId>spring-data-dynamodb</artifactId>
+			<version>4.2.1</version>
+		</dependency>
+		
+	</dependencies>
+
+	<profiles>
+
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<repositories>
+				<repository>
+					<id>maven-s3-snapshot-repo</id>
+					<url>s3://repo.involves.com.br/snapshot</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+
+				<repository>
+					<id>maven-s3-release-repo</id>
+					<url>s3://repo.involves.com.br/release</url>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+			<distributionManagement>
+				<repository>
+					<id>maven-s3-release-repo</id>
+					<url>s3://repo.involves.com.br/snapshot</url>
+				</repository>
+				<snapshotRepository>
+					<id>maven-s3-release-repo</id>
+					<url>s3://repo.involves.com.br/snapshot</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+
+		<profile>
+			<id>release</id>
+			<repositories>
+				<repository>
+					<id>maven-s3-release-repo</id>
+					<url>s3://repo.involves.com.br/release</url>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+			<distributionManagement>
+				<repository>
+					<id>maven-s3-release-repo</id>
+					<url>s3://repo.involves.com.br/release</url>
+				</repository>
+			</distributionManagement>
+		</profile>
+
+	</profiles>
+
+	<repositories>
+		<repository>
+			<id>opensourceagility-release</id>
+			<url>http://repo.opensourceagility.com/release/</url>
+		</repository>
+	</repositories>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${java.encoding}</encoding>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+
+
+		<extensions>
+			<extension>
+				<groupId>org.kuali.maven.wagons</groupId>
+				<artifactId>maven-s3-wagon</artifactId>
+				<version>1.2.1</version>
+			</extension>
+		</extensions>
+
+	</build>
+</project>

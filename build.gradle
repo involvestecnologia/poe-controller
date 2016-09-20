@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.6.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+group = 'br.com.involves'
+
+jar {
+    baseName = 'poe-controller-SNAPSHOT-SNAPSHOT'
+    version = '1.16.9.2'
+}
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo.opensourceagility.com/release/" }
+}
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+dependencies {
+    compile("commons-lang:commons-lang:2.6")
+    compile("org.socialsignin:spring-data-dynamodb:4.2.1")
+    compile group: 'javax.el', name: 'el-api', version: '2.2.1-b04'
+
+    testCompile("junit:junit:4.12")
+    testCompile("org.springframework:spring-test:4.3.2.RELEASE")
+}
+
+task startDB(type:Exec) {
+    println 'Iniciando DynamoDB'
+    commandLine "bash", "-c", "docker run -d --name dynamo-test-duplicate  -p 7779:7779  tray/dynamodb-local -inMemory -sharedDb -port 7779"
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('integration-test/main/java')
+        }
+        resources.srcDir file('integration-test/main/resources')
+    }
+}
+
+task integrationTest(type: Test) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+}
+
+task shutdownDB (type:Exec) {
+    println 'Derrubando DynamoDB'
+    commandLine "bash", "-c", "docker rm -f dynamo-test-duplicate"
+}
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+integrationTest.dependsOn startDB
+integrationTest.finalizedBy shutdownDB

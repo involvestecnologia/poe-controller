@@ -1,0 +1,47 @@
+{
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "id",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "client",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "hash",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "endPoint",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "json",
+      "AttributeType": "S"
+    }
+  ],
+  "TableName": "DuplicateEndPointTable",
+  "KeySchema": [
+    {
+      "AttributeName": "id",
+      "KeyType": "HASH"
+    },
+    {
+      "AttributeName": "client",
+      "KeyType": "RANGE"
+    },
+    {
+      "AttributeName": "hash",
+      "KeyType": "RANGE"
+    },
+    {
+      "AttributeName": "endPoint",
+      "KeyType": "RANGE"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 10,
+    "WriteCapacityUnits": 10
+  }
+}
