@@ -1,8 +1,8 @@
 package br.com.involves.poe.service;
 
 import br.com.involves.poe.exception.HashExistingException;
-import br.com.involves.poe.repository.DuplicateEndPointRepository;
-import br.com.involves.poe.table.DuplicateEndPointTable;
+import br.com.involves.poe.repository.PoeHashRepository;
+import br.com.involves.poe.table.PoeHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
@@ -17,7 +17,7 @@ public class AddHashServiceImpl implements AddHashService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AddHashServiceImpl.class);
 
     @Autowired
-    private DuplicateEndPointRepository repository;
+    private PoeHashRepository repository;
 
     @Autowired
     private FindHashService findHashService;
@@ -34,7 +34,7 @@ public class AddHashServiceImpl implements AddHashService {
 
         LOGGER.debug("Gravando registro com a hash/clint: " + hash + "/" + client);
 
-        DuplicateEndPointTable table = new DuplicateEndPointTable(client, hash, json, endPoint);
+        PoeHash table = new PoeHash(client, hash, json, endPoint);
         repository.save(table);
     }
 

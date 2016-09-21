@@ -16,7 +16,7 @@ group = 'br.com.involves'
 
 jar {
     baseName = 'poe-controller-SNAPSHOT-SNAPSHOT'
-    version = '1.16.9.2'
+    version = '1.16.9.3'
 }
 
 repositories {
