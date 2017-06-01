@@ -4,7 +4,7 @@
 
 	<groupId>br.com.involves</groupId>
 	<artifactId>poe-controller-SNAPSHOT</artifactId>
-	<version>1.16.9.3</version>
+	<version>2.17.5.1</version>
 	<name>poe-controller-SNAPSHOT</name>
 	<description>POST Once Exactly (POE) - Controla o POST para identificar requisição duplicadas.</description>
 	<packaging>jar</packaging>
@@ -102,13 +102,6 @@
 		</profile>
 
 	</profiles>
-
-	<repositories>
-		<repository>
-			<id>opensourceagility-release</id>
-			<url>http://repo.opensourceagility.com/release/</url>
-		</repository>
-	</repositories>
 
 	<build>
 
